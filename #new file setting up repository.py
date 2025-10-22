@@ -30,17 +30,17 @@ while t <= 100:
         print('Time interval ' + str(dt) + 's')
         print('Position is ' + str(y) + 'm' + '\n')
     if b == 25000:
-        print('Time is ' + str(t))
-        print('Time interval ' + str(dt))
-        print('Position is ' + str(y) + '\n')
+        print('Time is ' + str(t)+ 's')
+        print('Time interval ' + str(dt)+ 's')
+        print('Position is ' + str(y) + 'm' '\n')
     if b == 52000:
-        print('Time is ' + str(t))
-        print('Time interval ' + str(dt))
-        print('Position is ' + str(y) + '\n')
+        print('Time is ' + str(t) + 's')
+        print('Time interval ' + str(dt)+ 's')
+        print('Position is ' + str(y) + 'm'+'\n')
     if b == 78000:
-        print('Time is ' + str(t))
-        print('Time interval ' + str(dt))
-        print('Position is ' + str(y) + '\n')
+        print('Time is ' + str(t) + 's')
+        print('Time interval ' + str(dt)+ 's')
+        print('Position is ' + str(y) + 'm'+'\n')
     y=y+dy
     t=t+dt
     y_list.append(y)
