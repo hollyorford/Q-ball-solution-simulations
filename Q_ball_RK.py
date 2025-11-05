@@ -1,14 +1,9 @@
-#Q_ball_RK
-
-#Real Q-Ball simulation
-
-#Runge Kutta Method
+#Real Q-Ball simulation Runge Kutta Method
 
 import numpy as np
 from matplotlib import pyplot as plt
 
-
-x = 6 # x = phi/f_a for phi = 6 start
+x = 7 # x = phi/f_a for phi = 6 start
 x_mid = x
 
 r_tl = 0
@@ -22,12 +17,8 @@ dz = 0
 z = 0
 z_mid = z
 
-
-
 x_list = []
 r_list = []
-
-
 
 while r_tl < 100:
 
@@ -56,14 +47,12 @@ while r_tl < 100:
     dx = z_mid*dr_tl
     dz= (np.sin(x_mid) - ((omega_tl**2)*x_mid) - y_mid)*0.5*dr_tl
 
-    x_mid = x + dx
-    z_mid = z + dz
+    x = x + dx
+    z = z + dz
     r_tl = r_tl + dr_tl
 
     x_list.append(x)
     r_list.append(r_tl)
-
-
 
 plt.plot(r_list, x_list, color='#008080')
 plt.xlabel('Rescaled Radius $\\tilde{r}$',fontsize=22)
