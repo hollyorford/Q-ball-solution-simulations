@@ -73,11 +73,9 @@ while LOOP == True:
             LOOP = False
         if x > x_0:
             LOOP = False
-
-    print('MADE IT TO HERE 2, omega is ' + str(omega_tl))
+    
     omega_tl = omega_tl + dw_0
     changew = False
-    print('MADE IT TO HERE 3 omega is ' + str(omega_tl))
 
     x = x_0
     r_tl = 0
