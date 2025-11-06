@@ -3,11 +3,11 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
-x = 7 # x = phi/f_a for phi = 6 start
+x = 6.3466 # x = phi/f_a for phi = 6 start
 x_mid = x
 
 r_tl = 0
-omega_tl = 0.1
+omega_tl = 0.41
 
 dx = 0
 dr_tl = 0.0001

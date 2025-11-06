@@ -8,7 +8,7 @@ x_0 = x
 x_mid = x
 
 r_tl = 0
-omega_tl = 0.1
+omega_tl = 0.41
 
 dx = 0
 dr_tl = 0.0001
@@ -21,14 +21,12 @@ z_mid = z
 x_list = []
 r_list = []
 
-dx_0 = 0.0000001
+dw_0 = 0.00001
 LOOP = True
+changew=False
 
 while LOOP == True:
-    x = x_0 + dx_0
-    x_0 = x
-    changex = False
-    while r_tl < 100 and changex == False:
+    while r_tl < 100 and changew == False:
         if r_tl == 0:
             y_mid = 0 
         else:
@@ -65,10 +63,10 @@ while LOOP == True:
 
         if r_tl > 25:
             if x > 1:
-                changex = True
+                changew = True
         elif r_tl > 40:
             if x > 1:
-                changex = True
+                changew = True
         
 
         if x < 0:
@@ -76,10 +74,13 @@ while LOOP == True:
         if x > x_0:
             LOOP = False
 
-        
+    print('MADE IT TO HERE 2, omega is ' + str(omega_tl))
+    omega_tl = omega_tl + dw_0
+    changew = False
+    print('MADE IT TO HERE 3 omega is ' + str(omega_tl))
 
+    x = x_0
     r_tl = 0
-    omega_tl = 0.1
 
     dx = 0
     dr_tl = 0.0001
@@ -89,12 +90,14 @@ while LOOP == True:
     z = 0
     z_mid = z
 
-    print('Last x_0 value used was: ' +  str(x_0))
+    print('Last omega value used was: ' +  str(omega_tl))
     print('Minimum x acheieved was: ' + str(x_min) + ' At r value of: ' + str(r_min))
-    its = (6.3467 - x_0)/dx_0
+    its = (0.415 - omega_tl)/dw_0
     print('x_0 lies between 6.3466 and 6.3467, up to ' + str(its) + ' iterations remaining\n')
 
-
+print('\n \n Field just crossed into negative due to Omega value: ' + str(omega_tl))
+omega_tl = omega_tl - dw_0
+print('Ideal value of omega is: ' + str(omega_tl))
 x = x_0
 
 while r_tl < 100:
