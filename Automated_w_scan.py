@@ -8,7 +8,7 @@ x_0 = x
 x_mid = x
 
 r_tl = 0
-omega_tl = 0.41
+omega_tl = 0.41201
 
 dx = 0
 dr_tl = 0.0001
@@ -81,25 +81,25 @@ while LOOP == True:
     r_tl = 0
 
     dx = 0
-    dr_tl = 0.0001
+    dr_tl = 0.00001
     dr_tl_mid = dr_tl
     dz = 0
 
     z = 0
     z_mid = z
 
-    print('Last omega value used was: ' +  str(omega_tl))
+    print('Last omega value used was: ' +  str(omega_tl-dw_0))
     print('Minimum x acheieved was: ' + str(x_min) + ' At r value of: ' + str(r_min))
     its = (0.415 - omega_tl)/dw_0
-    print('x_0 lies between 6.3466 and 6.3467, up to ' + str(its) + ' iterations remaining\n')
+    print('w_0 lies between 0.41 and 0.415, up to ' + str(its) + ' iterations remaining\n')
 
 print('\n \n Field just crossed into negative due to Omega value: ' + str(omega_tl))
 omega_tl = omega_tl - dw_0
 print('Ideal value of omega is: ' + str(omega_tl))
 x = x_0
 
+print('Value of omega used for graph: ' + str(omega_tl))
 while r_tl < 100:
-
     print('Rescaled field value: ' + str(x) + '\n')
     print('Rescaled Scalar field: ' + str(r_tl) + '\n')
     print('   ')
@@ -131,6 +131,10 @@ while r_tl < 100:
 
     x_list.append(x)
     r_list.append(r_tl)
+
+
+print('Value of omega used for graph: ' + str(omega_tl))
+
 
 plt.plot(r_list, x_list, color='#008080')
 plt.xlabel('Rescaled Radius $\\tilde{r}$',fontsize=22)

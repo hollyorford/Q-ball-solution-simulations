@@ -1,4 +1,4 @@
-#Real Q-Ball simulation Runge Kutta Method
+#Scan_graph_check
 
 import numpy as np
 from matplotlib import pyplot as plt
@@ -7,7 +7,7 @@ x = 6.3466 # x = phi/f_a for phi = 6 start
 x_mid = x
 
 r_tl = 0
-omega_tl = 0.41203
+omega_tl = 0.41205
 
 dx = 0
 dr_tl = 0.0001
@@ -20,8 +20,9 @@ z_mid = z
 x_list = []
 r_list = []
 
-while r_tl < 100:
 
+print('Value of omega used for graph: ' + str(omega_tl))
+while r_tl < 100:
     print('Rescaled field value: ' + str(x) + '\n')
     print('Rescaled Scalar field: ' + str(r_tl) + '\n')
     print('   ')
@@ -53,6 +54,10 @@ while r_tl < 100:
 
     x_list.append(x)
     r_list.append(r_tl)
+
+
+print('Value of omega used for graph: ' + str(omega_tl))
+
 
 plt.plot(r_list, x_list, color='#008080')
 plt.xlabel('Rescaled Radius $\\tilde{r}$',fontsize=22)
