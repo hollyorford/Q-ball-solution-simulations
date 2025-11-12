@@ -23,7 +23,7 @@ r_list = []
 while r_tl < 100:
 
     print('Rescaled field value: ' + str(x) + '\n')
-    print('Rescaled Scalar field: ' + str(r_tl) + '\n')
+    print('Rescaled  radius: ' + str(r_tl) + '\n')
     print('   ')
 
     #MIDS
