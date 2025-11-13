@@ -29,7 +29,7 @@ E_list = []
 
 
 print('Value of omega used for graph: ' + str(omega_tl))
-while r_tl < 100:
+while r_tl < 25:
     print('Rescaled field value: ' + str(x) + '\n')
     print('Rescaled radius: ' + str(r_tl) + '\n')
     print('   ')
