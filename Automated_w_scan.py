@@ -3,15 +3,15 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
-x = 6.3466 #x = phi/f_a for phi
+x = 6 #6.3466 #x = phi/f_a for phi
 x_0 = x
 x_mid = x
 
 r_tl = 0
-omega_tl = 0.41201
+omega_tl = 0.8 #0.41201
 
 dx = 0
-dr_tl = 0.0001
+dr_tl = 0.01 #0.0001
 dr_tl_mid = dr_tl
 dz = 0
 

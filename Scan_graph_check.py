@@ -3,14 +3,14 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
-x = 6.3466 # x = phi/f_a for phi = 6 start
+x = 6 # x = phi/f_a for phi = 6 start
 x_mid = x
 
 r_tl = 0
-omega_tl = 0.41204
+omega_tl =  0.6 #0.412294939 for 6.3466, 0.001 #0.412295 #0.4123 #0.41204 MAKE LESS
 
 dx = 0
-dr_tl = 0.00001
+dr_tl = 0.001
 dr_tl_mid = dr_tl
 dz = 0
 
@@ -29,7 +29,7 @@ E_list = []
 
 
 print('Value of omega used for graph: ' + str(omega_tl))
-while r_tl < 25:
+while r_tl < 50:
     print('Rescaled field value: ' + str(x) + '\n')
     print('Rescaled radius: ' + str(r_tl) + '\n')
     print('   ')
@@ -45,7 +45,7 @@ while r_tl < 25:
     
     V_mid = 1-np.cos(x) #NEW
     dE_mid = 4*np.pi*((0.5*(z**2))+(((omega_tl**2)*(x**2))/2)+V_mid)*(r_tl**2)*dr_tl #NEW
-    dQ_mid = 4*np.pi*((x**2)*(r_tl**2))*dr_tl #NEW
+    dQ_mid = 4*np.pi*omega_tl*((x**2)*(r_tl**2))*dr_tl #NEW
 
     x_mid = x + dx_mid
     z_mid = z + dz_mid
@@ -65,7 +65,7 @@ while r_tl < 25:
     
     V = 1-np.cos(x_mid) #NEW
     dE = 4*np.pi*((0.5*(z_mid**2))+(((omega_tl**2)*(x_mid**2))/2)+V)*(r_tl_mid**2)*dr_tl #NEW
-    dQ = 4*np.pi*((x_mid**2)*(r_tl_mid**2))*dr_tl #NEW
+    dQ = 4*np.pi*omega_tl*((x_mid**2)*(r_tl_mid**2))*dr_tl #NEW
 
     x = x + dx
     z = z + dz
