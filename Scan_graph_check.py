@@ -3,14 +3,15 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
-x = 6 # x = phi/f_a for phi = 6 start
+x = 6.00 # x = phi/f_a for phi = 6 start
+x_0=x
 x_mid = x
 
 r_tl = 0
-omega_tl =  0.6 #0.412294939 for 6.3466, 0.001 #0.412295 #0.4123 #0.41204 MAKE LESS
+omega_tl = 0.72122648 #0.72 #0.4723751033 #0.472375 #0.4721 #0.412294939 for 6.3466, 0.001 #0.412295 #0.4123 #0.41204 MAKE LESS
 
 dx = 0
-dr_tl = 0.001
+dr_tl = 0.0001
 dr_tl_mid = dr_tl
 dz = 0
 
@@ -27,6 +28,9 @@ r_list = []
 Q_list = []
 E_list = []
 
+const_EQ = True
+const_E = E
+const_Q = Q
 
 print('Value of omega used for graph: ' + str(omega_tl))
 while r_tl < 50:
@@ -61,7 +65,7 @@ while r_tl < 50:
         y = (2/r_tl_mid)*z_mid
     
     dx = z_mid*dr_tl
-    dz= (np.sin(x_mid) - ((omega_tl**2)*x_mid) - y_mid)*0.5*dr_tl
+    dz= (np.sin(x_mid) - ((omega_tl**2)*x_mid) - y)*dr_tl
     
     V = 1-np.cos(x_mid) #NEW
     dE = 4*np.pi*((0.5*(z_mid**2))+(((omega_tl**2)*(x_mid**2))/2)+V)*(r_tl_mid**2)*dr_tl #NEW
@@ -80,26 +84,48 @@ while r_tl < 50:
     E_list.append(E)
     Q_list.append(Q)
 
+    if r_tl > 20: #CHANGE HERE FOR DIFFERENT MODELS
+        if const_EQ == True:
+            const_E = E
+            const_Q = Q
+            const_EQ = False
+
+        
+
 print('Value of omega used for graph: ' + str(omega_tl))
+print('Total constant energy of qball is: ' + str(const_E))
+print('Total constant charge of qball is: ' + str(const_Q))
 
+labelleg = '$x(0) = $' +  str(x_0) + '\n' + '$\\tilde{{\omega}}$ = ' + str(omega_tl) + '\n' + '$d\\tilde{{r}} = $'+str(dr_tl)
 
-plt.plot(r_list, x_list, color='#008080')
+plt.plot(r_list, x_list, color='#008080', label = labelleg, linewidth=2.0 )
 plt.xlabel('Rescaled Radius $\\tilde{r}$',fontsize=22)
 plt.ylabel('Rescaled Scalar Field $\phi /f_a$',fontsize=22)
+plt.legend(fontsize=20, loc= 'upper right')
 plt.xticks(fontsize=20)
 plt.yticks(fontsize=20)
 plt.show()
 
-plt.plot(r_list, Q_list, color="#CA8C05")
+plt.plot(r_list, Q_list, color="#CA8C05", label= labelleg, linewidth=2.0)
 plt.xlabel('Rescaled Radius $\\tilde{r}$',fontsize=22)
 plt.ylabel('Internal Charge',fontsize=22)
+plt.legend(fontsize=20, loc= 'upper left')
 plt.xticks(fontsize=20)
 plt.yticks(fontsize=20)
 plt.show()
 
-plt.plot(r_list, E_list, color="#CA0564")
+plt.plot(r_list, E_list, color="#CA0564", label=labelleg, linewidth=2.0)
 plt.xlabel('Rescaled Radius $\\tilde{r}$',fontsize=22)
 plt.ylabel('Energy',fontsize=22)
+plt.legend(fontsize=20, loc= 'upper left')
 plt.xticks(fontsize=20)  
+plt.yticks(fontsize=20)
+plt.show()
+
+plt.plot(Q_list, E_list, color="#3ACA05", label=labelleg, linewidth=2.0)
+plt.xlabel('Charge $\\tilde{r}$',fontsize=22)
+plt.legend(fontsize=20, loc= 'upper left')
+plt.ylabel('Energy',fontsize=22)
+plt.xticks(fontsize=20)
 plt.yticks(fontsize=20)
 plt.show()
