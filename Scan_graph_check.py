@@ -2,13 +2,14 @@
 
 import numpy as np
 from matplotlib import pyplot as plt
+from matplotlib.lines import Line2D
 
-x = 6.00 # x = phi/f_a for phi = 6 start
+x = 5.0 #SOL 1: 6.00 
 x_0=x
 x_mid = x
 
 r_tl = 0
-omega_tl = 0.72122648 #0.72 #0.4723751033 #0.472375 #0.4721 #0.412294939 for 6.3466, 0.001 #0.412295 #0.4123 #0.41204 MAKE LESS
+omega_tl = 0.832 #SOL 1: 0.72122648
 
 dx = 0
 dr_tl = 0.0001
@@ -27,15 +28,22 @@ r_list = []
 
 Q_list = []
 E_list = []
+eq_ratio_list = []
+eq_ratio = 0
 
 const_EQ = True
 const_E = E
 const_Q = Q
 
+noprint = False
+findEQ = True
+EQ_plateau_ratio = 0
+
 print('Value of omega used for graph: ' + str(omega_tl))
-while r_tl < 50:
+while r_tl < 25:
     print('Rescaled field value: ' + str(x) + '\n')
     print('Rescaled radius: ' + str(r_tl) + '\n')
+    print('E/Q Ratio is: ' + str(eq_ratio))
     print('   ')
 
     #MIDS
@@ -48,8 +56,8 @@ while r_tl < 50:
     dz_mid = (np.sin(x) - ((omega_tl**2)*x) - y_mid)*0.5*dr_tl
     
     V_mid = 1-np.cos(x) #NEW
-    dE_mid = 4*np.pi*((0.5*(z**2))+(((omega_tl**2)*(x**2))/2)+V_mid)*(r_tl**2)*dr_tl #NEW
-    dQ_mid = 4*np.pi*omega_tl*((x**2)*(r_tl**2))*dr_tl #NEW
+    dE_mid = 4*np.pi*((0.5*(z**2))+(((omega_tl**2)*(x**2))/2)+V_mid)*(r_tl**2)*0.5*dr_tl #NEW
+    dQ_mid = 4*np.pi*omega_tl*((x**2)*(r_tl**2))*0.5*dr_tl #NEW
 
     x_mid = x + dx_mid
     z_mid = z + dz_mid
@@ -75,6 +83,10 @@ while r_tl < 50:
     z = z + dz
     r_tl = r_tl + dr_tl
 
+    if x < 0:
+        noprint = True
+        break
+   
     E = E + dE #NEW
     Q = Q + dQ #NEW
 
@@ -83,49 +95,78 @@ while r_tl < 50:
     
     E_list.append(E)
     Q_list.append(Q)
+    
+    eq_ratio = E/Q
+    eq_ratio_list.append(eq_ratio)
 
-    if r_tl > 20: #CHANGE HERE FOR DIFFERENT MODELS
-        if const_EQ == True:
-            const_E = E
-            const_Q = Q
-            const_EQ = False
+    if findEQ == True:
+        if r_tl > 10: #For a stable solution, r=10 is comfortably in plateau so this gives approximate E/Q
+            EQ_plateau_ratio = E/Q
+            findEQ = False
 
-        
-
+print('Initial field value x_0 used: ' + str(x_0))
 print('Value of omega used for graph: ' + str(omega_tl))
-print('Total constant energy of qball is: ' + str(const_E))
-print('Total constant charge of qball is: ' + str(const_Q))
+print('Total E/Q ratio of qball is: ' + str(EQ_plateau_ratio))
 
 labelleg = '$x(0) = $' +  str(x_0) + '\n' + '$\\tilde{{\omega}}$ = ' + str(omega_tl) + '\n' + '$d\\tilde{{r}} = $'+str(dr_tl)
+labelleg2 = '$x(0) = $' +  str(x_0) + '\n' + '$\\tilde{{\omega}}$ = ' + str(omega_tl)
 
-plt.plot(r_list, x_list, color='#008080', label = labelleg, linewidth=2.0 )
-plt.xlabel('Rescaled Radius $\\tilde{r}$',fontsize=22)
-plt.ylabel('Rescaled Scalar Field $\phi /f_a$',fontsize=22)
-plt.legend(fontsize=20, loc= 'upper right')
-plt.xticks(fontsize=20)
-plt.yticks(fontsize=20)
-plt.show()
+if noprint == False:
+    plt.plot(r_list, x_list, color='#008080', label = labelleg, linewidth=2.0 )
+    plt.xlabel('Rescaled Radius $\\tilde{r}$',fontsize=22)
+    plt.ylabel('Rescaled Scalar Field $\phi /f_a$',fontsize=22)
+    plt.title('Graph showing rescaled scalar field plotted against rescaled radius', fontsize=22)
+    plt.legend(fontsize=20, loc= 'upper right')
+    plt.xticks(fontsize=20)
+    plt.yticks(fontsize=20)
+    plt.show()
 
-plt.plot(r_list, Q_list, color="#CA8C05", label= labelleg, linewidth=2.0)
-plt.xlabel('Rescaled Radius $\\tilde{r}$',fontsize=22)
-plt.ylabel('Internal Charge',fontsize=22)
-plt.legend(fontsize=20, loc= 'upper left')
-plt.xticks(fontsize=20)
-plt.yticks(fontsize=20)
-plt.show()
+    plt.plot(r_list, E_list, color="#CA0564", label= 'Energy', linewidth=2.0)
+    plt.plot(r_list, Q_list, color="#EA822C", label= 'Charge', linewidth=2.0)
+    plt.xlabel('Rescaled Radius $\\tilde{r}$',fontsize=22)
+    plt.title('Graph for Energy and Charge with x(0)=' + str(x_0) + ' and $\\tilde{{\omega}}$ =' + str(omega_tl), fontsize=22)
+    plt.ylabel('Energy and Charge',fontsize=22)
+    plt.legend(fontsize=20, loc='upper left')
+    plt.xticks(fontsize=20)  
+    plt.yticks(fontsize=20)
+    plt.show()
 
-plt.plot(r_list, E_list, color="#CA0564", label=labelleg, linewidth=2.0)
-plt.xlabel('Rescaled Radius $\\tilde{r}$',fontsize=22)
-plt.ylabel('Energy',fontsize=22)
-plt.legend(fontsize=20, loc= 'upper left')
-plt.xticks(fontsize=20)  
-plt.yticks(fontsize=20)
-plt.show()
+    plt.plot(r_list, eq_ratio_list, color="#5D3691", label= labelleg2, linewidth=2.0)
+    plt.xlabel('Rescaled Radius $\\tilde{r}$',fontsize=22)
+    plt.ylabel('Energy/Charge Ratio',fontsize=22)
+    plt.axhline(1.0, color="#FF0000", linestyle='--')
+    plt.title('Graph showing stable ratio of Energy to Charge for Q-ball', fontsize=22)
+    plt.legend(fontsize=20, loc= 'bottom right')
+    plt.xticks(fontsize=20)  
+    plt.yticks(fontsize=20)
+    plt.show()
 
-plt.plot(Q_list, E_list, color="#3ACA05", label=labelleg, linewidth=2.0)
-plt.xlabel('Charge $\\tilde{r}$',fontsize=22)
-plt.legend(fontsize=20, loc= 'upper left')
-plt.ylabel('Energy',fontsize=22)
-plt.xticks(fontsize=20)
-plt.yticks(fontsize=20)
-plt.show()
+    plt.plot(Q_list, E_list, color="#3ACA05", label=labelleg, linewidth=2.0)
+    plt.xlabel('Charge $\\tilde{r}$',fontsize=22)
+    plt.legend(fontsize=20, loc= 'upper left')
+    plt.title('Graph showing Q-ball Charge plotted against Energy', fontsize=22)
+    plt.ylabel('Energy',fontsize=22)
+    plt.xticks(fontsize=20)
+    plt.yticks(fontsize=20)
+    plt.show()
+
+    plt.plot(r_list, Q_list, color="#CA8C05", label= labelleg, linewidth=2.0)
+    plt.xlabel('Rescaled Radius $\\tilde{r}$',fontsize=22)
+    plt.ylabel('Internal Charge',fontsize=22)
+    plt.title('Graph showing Q-ball Charge plotted against rescaled Radius', fontsize=22)
+    plt.legend(fontsize=20, loc= 'upper left')
+    plt.xticks(fontsize=20)
+    plt.yticks(fontsize=20)
+    plt.show()
+
+    plt.plot(r_list, E_list, color="#CA0564", label=labelleg, linewidth=2.0)
+    plt.xlabel('Rescaled Radius $\\tilde{r}$',fontsize=22)
+    plt.ylabel('Energy',fontsize=22)
+    plt.legend(fontsize=20, loc= 'upper left')
+    plt.title('Graph showing Q-ball Energy plotted against rescaled Radius', fontsize=22)
+    plt.xticks(fontsize=20)  
+    plt.yticks(fontsize=20)
+    plt.show()
+
+else:
+    print('\n Scalar field turned negative adjust omega')
