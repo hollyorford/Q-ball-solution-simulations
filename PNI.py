@@ -39,6 +39,8 @@ noprint = False
 findEQ = True
 EQ_plateau_ratio = 0
 
+print('PURE NATURAL INFLATION MODEL NOW RUNNING')
+
 print('Value of omega used for graph: ' + str(omega_tl))
 while r_tl < 11: #Change for more accuracy, reduced for speed in calculations
     print('Rescaled field value: ' + str(x) + '\n')
