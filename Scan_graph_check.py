@@ -189,7 +189,7 @@ if noprint == False:
     plt.ylabel('Energy/Charge Ratio',fontsize=22)
     plt.axhline(1.0, color="#FF0000", linestyle='--')
     plt.title('Graph showing stable ratio of Energy to Charge for Q-ball', fontsize=22)
-    plt.legend(fontsize=20, loc= 'bottom right')
+    plt.legend(fontsize=20, loc= 'lower right')
     plt.xticks(fontsize=20)  
     plt.yticks(fontsize=20)
     plt.show()
