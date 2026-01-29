@@ -4,6 +4,7 @@
 
 import numpy as np
 from matplotlib import pyplot as plt
+import pandas
 
 # Basic Equation y.. + 2 gamma y. = -omega^2 y
 # rewrite as a pair of coupled first order equations y. = z and y..=z.

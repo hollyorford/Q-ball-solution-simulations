@@ -4,13 +4,18 @@ import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.lines import Line2D
 
-x = 4.9 #SOL 1: 6.00 
+p = 3
+M_pl= 1.22e+19 #GeV
+F=0.01*M_pl
+
+x = 15
+omega_tl = 0.7
+r_max=30
+
 x_0=x
 x_mid = x
 
 r_tl = 0
-omega_tl = 0.839 #SOL 1: 0.72122648
-
 dx = 0
 dr_tl = 0.0001
 dr_tl_mid = dr_tl
@@ -42,7 +47,7 @@ EQ_plateau_ratio = 0
 print('PURE NATURAL INFLATION MODEL NOW RUNNING')
 
 print('Value of omega used for graph: ' + str(omega_tl))
-while r_tl < 11: #Change for more accuracy, reduced for speed in calculations
+while r_tl < r_max: #Change for more accuracy, reduced for speed in calculations
     print('Rescaled field value: ' + str(x) + '\n')
     print('Rescaled radius: ' + str(r_tl) + '\n')
     print('E/Q Ratio is: ' + str(eq_ratio))
@@ -55,9 +60,9 @@ while r_tl < 11: #Change for more accuracy, reduced for speed in calculations
         y_mid = (2/r_tl)*z
     
     dx_mid = 0.5*z*dr_tl
-    dz_mid = (np.sin(x) - ((omega_tl**2)*x) - y_mid)*0.5*dr_tl
+    dz_mid = ((2*p*(x**(-2*p-1))) - ((omega_tl**2)*x) - y_mid)*0.5*dr_tl
     
-    V_mid = 1-np.cos(x) #NEW
+    V_mid = (1-(x**(-2*p))) #Removed M^4 since drops out in energy eq. due to E rescaling, technically also rescaled potentially
     dE_mid = 4*np.pi*((0.5*(z**2))+(((omega_tl**2)*(x**2))/2)+V_mid)*(r_tl**2)*0.5*dr_tl #NEW
     dQ_mid = 4*np.pi*omega_tl*((x**2)*(r_tl**2))*0.5*dr_tl #NEW
 
@@ -75,9 +80,9 @@ while r_tl < 11: #Change for more accuracy, reduced for speed in calculations
         y = (2/r_tl_mid)*z_mid
     
     dx = z_mid*dr_tl
-    dz= (np.sin(x_mid) - ((omega_tl**2)*x_mid) - y)*dr_tl
+    dz= ((2*p*(x**(-2*p-1))) - ((omega_tl**2)*x_mid) - y)*dr_tl
     
-    V = 1-np.cos(x_mid) #NEW
+    V = (1-(x**(-2*p))) #Removed M^4 since drops out in rescaled E equation where this is used
     dE = 4*np.pi*((0.5*(z_mid**2))+(((omega_tl**2)*(x_mid**2))/2)+V)*(r_tl_mid**2)*dr_tl #NEW
     dQ = 4*np.pi*omega_tl*((x_mid**2)*(r_tl_mid**2))*dr_tl #NEW
 
@@ -112,56 +117,7 @@ print('Initial field value x_0 used: ' + str(x_0))
 print('Value of omega used for graph: ' + str(omega_tl))
 print('Total E/Q ratio of qball is: ' + str(EQ_plateau_ratio))
 
-
-#Radius finder
-
-f_a = 1e15 #1e12 for QCD in GeV but converted to MeV
-Lambda = 150 #MeV
-
-print('For initial value x(0)=' + str(x_0))
-print('\nEnergy of Q-ball Plateau = ' + str(E_val))
-print('Charge of Q-ball Plateau = ' + str(Q_val))
-i = 0
-energy_val = E_list[i]
-
-Radius_energy = 0.99*E_val
-
-while energy_val < Radius_energy:
-    i = i+1
-    energy_val = E_list[i]
-
-percentage = (energy_val/E_val)*100
-resc_Radius = r_list[i]
-Radius_MeV = (f_a*resc_Radius)/(Lambda**2)
-Radius_length = (197.3*Radius_MeV)/(1e15) #Converted fm to m
-
-if Radius_length <= 1e-12:
-    unit = 'pm'
-    Radius_length=Radius_length*(1e12)
-elif 1e-12 < Radius_length <= 1e-9:
-    unit = 'nm'
-    Radius_length=Radius_length*(1e9)
-elif 1e-9 < Radius_length <= 1e-6:
-    unit = 'micrometers'
-    Radius_length=Radius_length*(1e6)
-elif 1e-6 < Radius_length <= 1e-2:
-    unit = 'mm'
-    Radius_length=Radius_length*(1e3)
-elif 1e-2 < Radius_length <= 1:
-    unit = 'cm'
-    Radius_length=Radius_length*(1e2)
-elif 1 < Radius_length <= 1e3:
-    unit = 'm'
-elif 1e3 < Radius_length:
-    unit = 'km'
-    Radius_length=Radius_length/1e3
-
-print('\nRadius of Q-ball is ' + str(Radius_length) + unit)
-print('This radius contains ' + str(percentage) + '%' + ' of the Q-ball energy')
-
-
 #Graphs
-
 
 labelleg = '$x(0) = $' +  str(x_0) + '\n' + '$\\tilde{{\omega}}$ = ' + str(omega_tl) + '\n' + '$d\\tilde{{r}} = $'+str(dr_tl)
 labelleg2 = '$x(0) = $' +  str(x_0) + '\n' + '$\\tilde{{\omega}}$ = ' + str(omega_tl)
@@ -191,7 +147,7 @@ if noprint == False:
     plt.ylabel('Energy/Charge Ratio',fontsize=22)
     plt.axhline(1.0, color="#FF0000", linestyle='--')
     plt.title('Graph showing stable ratio of Energy to Charge for Q-ball', fontsize=22)
-    plt.legend(fontsize=20, loc= 'bottom right')
+    plt.legend(fontsize=20, loc= 'lower right')
     plt.xticks(fontsize=20)  
     plt.yticks(fontsize=20)
     plt.show()
