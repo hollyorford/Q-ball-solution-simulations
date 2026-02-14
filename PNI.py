@@ -8,9 +8,9 @@ p = 3
 M_pl= 1.22e+19 #GeV
 F=0.01*M_pl
 
-x = 15
-omega_tl = 0.7
-r_max=30
+x = 4.89
+omega_tl = 0.777
+r_max=15
 
 x_0=x
 x_mid = x
@@ -24,7 +24,7 @@ dz = 0
 z = 0
 z_mid = z
 
-V = 0 #NEW
+V_resc = 0 #NEW
 E = 0 #NEW
 Q = 0 #NEW
 
@@ -35,6 +35,7 @@ Q_list = []
 E_list = []
 eq_ratio_list = []
 eq_ratio = 0
+V_list = []
 
 const_EQ = True
 const_E = E
@@ -60,10 +61,10 @@ while r_tl < r_max: #Change for more accuracy, reduced for speed in calculations
         y_mid = (2/r_tl)*z
     
     dx_mid = 0.5*z*dr_tl
-    dz_mid = ((2*p*(x**(-2*p-1))) - ((omega_tl**2)*x) - y_mid)*0.5*dr_tl
+    dz_mid = ((2*x*p*((1+(x)**2)**(-p-1))) - ((omega_tl**2)*x) - y_mid)*0.5*dr_tl
     
-    V_mid = (1-(x**(-2*p))) #Removed M^4 since drops out in energy eq. due to E rescaling, technically also rescaled potentially
-    dE_mid = 4*np.pi*((0.5*(z**2))+(((omega_tl**2)*(x**2))/2)+V_mid)*(r_tl**2)*0.5*dr_tl #NEW
+    V_mid_resc = (1-((1+(x**2))**(-p))) #Removed M^4 since drops out in energy eq. due to E rescaling, technically also rescaled potentially
+    dE_mid = 4*np.pi*((0.5*(z**2))+(((omega_tl**2)*(x**2))/2)+V_mid_resc)*(r_tl**2)*0.5*dr_tl #NEW
     dQ_mid = 4*np.pi*omega_tl*((x**2)*(r_tl**2))*0.5*dr_tl #NEW
 
     x_mid = x + dx_mid
@@ -80,10 +81,10 @@ while r_tl < r_max: #Change for more accuracy, reduced for speed in calculations
         y = (2/r_tl_mid)*z_mid
     
     dx = z_mid*dr_tl
-    dz= ((2*p*(x**(-2*p-1))) - ((omega_tl**2)*x_mid) - y)*dr_tl
+    dz= ((2*x_mid*p*((1+(x_mid)**2)**(-p-1))) - ((omega_tl**2)*x_mid) - y)*dr_tl
     
-    V = (1-(x**(-2*p))) #Removed M^4 since drops out in rescaled E equation where this is used
-    dE = 4*np.pi*((0.5*(z_mid**2))+(((omega_tl**2)*(x_mid**2))/2)+V)*(r_tl_mid**2)*dr_tl #NEW
+    V_resc = (1-((1+(x_mid**2))**(-p))) #Removed M^4 since drops out in rescaled E equation where this is used
+    dE = 4*np.pi*((0.5*(z_mid**2))+(((omega_tl**2)*(x_mid**2))/2)+V_resc)*(r_tl_mid**2)*dr_tl #NEW
     dQ = 4*np.pi*omega_tl*((x_mid**2)*(r_tl_mid**2))*dr_tl #NEW
 
     x = x + dx
@@ -99,6 +100,7 @@ while r_tl < r_max: #Change for more accuracy, reduced for speed in calculations
 
     x_list.append(x)
     r_list.append(r_tl)
+    V_list.append(V_resc)
     
     E_list.append(E)
     Q_list.append(Q)
@@ -107,7 +109,7 @@ while r_tl < r_max: #Change for more accuracy, reduced for speed in calculations
     eq_ratio_list.append(eq_ratio)
 
     if findEQ == True:
-        if r_tl > 10: #For a stable solution, r=10 is comfortably in plateau so this gives approximate E/Q
+        if r_tl > 5.5: #For a stable solution, r=10 is comfortably in plateau so this gives approximate E/Q
             E_val = E
             Q_val = Q
             EQ_plateau_ratio = E/Q
@@ -121,6 +123,7 @@ print('Total E/Q ratio of qball is: ' + str(EQ_plateau_ratio))
 
 labelleg = '$x(0) = $' +  str(x_0) + '\n' + '$\\tilde{{\omega}}$ = ' + str(omega_tl) + '\n' + '$d\\tilde{{r}} = $'+str(dr_tl)
 labelleg2 = '$x(0) = $' +  str(x_0) + '\n' + '$\\tilde{{\omega}}$ = ' + str(omega_tl)
+labelEQ = '\nE/Q ratio for plateau:\n' + str(round(EQ_plateau_ratio,6))
 
 if noprint == False:
     plt.plot(r_list, x_list, color='#008080', label = labelleg, linewidth=2.0 )
@@ -133,10 +136,19 @@ if noprint == False:
     plt.show()
 
     plt.plot(r_list, E_list, color="#CA0564", label= 'Energy', linewidth=2.0)
-    plt.plot(r_list, Q_list, color="#EA822C", label= 'Charge', linewidth=2.0)
+    plt.plot(r_list, Q_list, color="#EA822C", label= 'Charge' + labelEQ, linewidth=2.0)
     plt.xlabel('Rescaled Radius $\\tilde{r}$',fontsize=22)
     plt.title('Graph for Energy and Charge with x(0)=' + str(x_0) + ' and $\\tilde{{\omega}}$ =' + str(omega_tl), fontsize=22)
     plt.ylabel('Energy and Charge',fontsize=22)
+    plt.legend(fontsize=20, loc='upper left')
+    plt.xticks(fontsize=20)  
+    plt.yticks(fontsize=20)
+    plt.show()
+
+    plt.plot(r_list, V_list, color="#0B830B", label= 'Potential', linewidth=2.0)
+    plt.xlabel('Rescaled Radius $\\tilde{r}$',fontsize=22)
+    plt.title('Graph of Pure Natural Inflation Potential against Radius', fontsize=22)
+    plt.ylabel('Rescaled Potential',fontsize=22)
     plt.legend(fontsize=20, loc='upper left')
     plt.xticks(fontsize=20)  
     plt.yticks(fontsize=20)
